@@ -18,6 +18,7 @@ else
 fi
 
 stage="$(pwd)"
+srcdir="$stage/.."
 
 # load autbuild provided shell functions and variables
 source_environment_tempfile="$stage/source_environment.sh"
@@ -31,21 +32,49 @@ echo "${NDSTUB_VERSION}" > "${stage}/VERSION.txt"
 mkdir -p "$stage/lib/release"
 case "$AUTOBUILD_PLATFORM" in
 	windows*)
-        if [ "$AUTOBUILD_ADDRSIZE" = 32 ]
-        then
-            archflags=""
-        else
-            archflags=""
-        fi
-        cmake -E env CFLAGS="$archflags /Z7" CXXFLAGS="$archflags /Z7" \
-        cmake -G "$AUTOBUILD_WIN_CMAKE_GEN" -A "$AUTOBUILD_WIN_VSPLATFORM" ..
 
-        cmake --build . --config "Debug" -j --clean-first
-        cmake --build . --config "Release" -j --clean-first
+            load_vsvars
 
-	    cp "$stage/Source/lib/Release/nd_hacdConvexDecomposition.lib" "$stage/lib/release/"
-	    cp "$stage/Source/Pathing/Release/nd_Pathing.lib" "$stage/lib/release/"
-	    cp "$stage/Source/HACD_Lib/Release/hacd.lib" "$stage/lib/release/"
+            if [ "$AUTOBUILD_ADDRSIZE" = 32 ]
+            then
+                archflags=""
+            else
+                archflags=""
+            fi
+
+            # Create staging dirs
+            mkdir -p "${stage}/lib/debug"
+            mkdir -p "${stage}/lib/release"
+
+            # Debug Build
+            mkdir -p "build_debug"
+            pushd "build_debug"
+
+                cmake -E env CFLAGS="$archflags /Z7" CXXFLAGS="$archflags /Z7" LDFLAGS="/DEBUG:FULL" \
+                cmake $(cygpath -w "$srcdir") -G "$AUTOBUILD_WIN_CMAKE_GEN" -A "$AUTOBUILD_WIN_VSPLATFORM" \
+                    -DCMAKE_INSTALL_PREFIX="$(cygpath -m "$stage")"
+
+                cmake --build . --config Debug --clean-first
+
+	    		cp "Source/lib/Debug/nd_hacdConvexDecomposition.lib" "$stage/lib/debug/"
+	    		cp "Source/Pathing/Debug/nd_Pathing.lib" "$stage/lib/debug/"
+	    		cp "Source/HACD_Lib/Debug/hacd.lib" "$stage/lib/debug/"
+            popd
+
+            # Release Build
+            mkdir -p "build_release"
+            pushd "build_release"
+
+                cmake -E env CFLAGS="$archflags /O2 /Ob3 /Gy /Z7" CXXFLAGS="$archflags /O2 /Ob3 /Gy /Z7 /std:c++17 /permissive-" LDFLAGS="/OPT:REF /OPT:ICF /DEBUG:FULL" \
+                cmake $(cygpath -w "$srcdir") -G "$AUTOBUILD_WIN_CMAKE_GEN" -A "$AUTOBUILD_WIN_VSPLATFORM" \
+                    -DCMAKE_INSTALL_PREFIX="$(cygpath -m "$stage")"
+
+                cmake --build . --config Release --clean-first
+				
+	    		cp "Source/lib/Release/nd_hacdConvexDecomposition.lib" "$stage/lib/release/"
+	    		cp "Source/Pathing/Release/nd_Pathing.lib" "$stage/lib/release/"
+	    		cp "Source/HACD_Lib/Release/hacd.lib" "$stage/lib/release/"
+            popd
 	;;
 	"darwin")
 	    cmake -DCMAKE_OSX_ARCHITECTURES='x86_64' \
