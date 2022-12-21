@@ -144,6 +144,9 @@ public:
 	// Obtain a pointer to the actual implementation
 	static LLConvexDecomposition* getInstance();
 
+	/// @returns false if this is the stub
+	static bool isFunctional();
+	
 	static LLCDResult initSystem();
 	static LLCDResult initThread();
 	static LLCDResult quitThread();
@@ -217,8 +220,6 @@ public:
 	//
 	/// Debug
 	virtual void loadMeshData(const char* fileIn, LLCDMeshData** meshDataOut) = 0;
-
-	virtual bool isFunctional()=0;
 
 private:
 	static bool s_isInitialized;

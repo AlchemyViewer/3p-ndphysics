@@ -94,8 +94,6 @@ public:
 
 	virtual void setTracer( ndConvexDecompositionTracer *);
 
-	virtual bool isFunctional();
-
 private:
 	nd_hacdConvexDecomposition();
 };

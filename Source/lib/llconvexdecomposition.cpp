@@ -77,4 +77,7 @@
 	return nd_hacdConvexDecomposition::quitSystem();
 }
 
-
+/*static*/bool LLConvexDecomposition::isFunctional()
+{
+	return true;
+}
