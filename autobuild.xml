@@ -3,6 +3,8 @@
 <map>
     <key>package_description</key>
     <map>
+      <key>canonical_repo</key>
+      <string>https://github.com/AlchemyViewer/3p-ndphysics</string>
       <key>copyright</key>
       <string>Copyright (c)2011-2013 Nicky Dasmijn</string>
       <key>description</key>
@@ -63,7 +65,6 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>lib/debug/*.a</string>
             <string>lib/release/*.a</string>
           </array>
           <key>name</key>
@@ -88,7 +89,6 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>lib/debug/*.a</string>
             <string>lib/release/*.a</string>
           </array>
           <key>name</key>
