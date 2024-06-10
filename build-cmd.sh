@@ -91,9 +91,9 @@ darwin*)
         cmake --build . --config Release
 
         # Copy the new libs
-        cp "Source/lib/Release/libnd_hacdConvexDecomposition.a" "$stage/lib/release/"
-        cp "Source/Pathing/Release/libnd_Pathing.a" "$stage/lib/release/"
-        cp "Source/HACD_Lib/Release/libhacd.a" "$stage/lib/release/"
+        cp "Source/lib/libnd_hacdConvexDecomposition.a" "$stage/lib/release/"
+        cp "Source/Pathing/libnd_Pathing.a" "$stage/lib/release/"
+        cp "Source/HACD_Lib/libhacd.a" "$stage/lib/release/"
     popd
     ;;
 linux*)
