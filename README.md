@@ -1,4 +1,4 @@
-# 3p-zlib-ng
+# 3p-ndphysics
 
 [Autobuild][] packaged ndPhysicsStub.
 
